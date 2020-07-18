@@ -63,6 +63,12 @@ from sklearn.linear_model import LinearRegression
 regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 
+
+#To see what coefficients our regression model has chosen, execute the following script:
+coeff_df = pd.DataFrame(regressor.coef_, X.columns, columns=['Coefficient'])  
+coeff_df
+
+
 # Predicting the Test set results
 y_pred = regressor.predict(X_test)
 print(y_pred)
@@ -73,6 +79,8 @@ y_pred_invtrans=sc_y.inverse_transform(y_pred)
 print(r2_score(y_test,y_pred_invtrans))
 
 
+print(regressor.score(X_train, y_train))
+
 
 #print(r2_score(y_test_sc, y_pred))
 
@@ -81,6 +89,11 @@ print(r2_score(y_test,y_pred_invtrans))
 #compare both 
 df = pd.DataFrame({'Actual': y_test.flatten(), 'Predicted': y_pred_invtrans.flatten()})
 #coef_ : array, shape (n_features, ) or (n_targets, n_features)
+df1 = df.head(25)
+df1.plot(kind='bar',figsize=(16,10))
+plt.grid(which='major', linestyle='-', linewidth='0.5', color='green')
+plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+plt.show()
 
 print(regressor.coef_)
 
@@ -88,6 +101,36 @@ print(regressor.coef_)
 
 print(regressor.intercept_)
 
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+import math
+#Lets print the MAE, MSE and RMSE
+print('Mean Absolute Error:', mean_absolute_error(y_test, y_pred_invtrans))  
+print('Mean Squared Error:', mean_squared_error(y_test, y_pred_invtrans))  
+print('Root Mean Squared Error:', np.sqrt(mean_squared_error(y_test, y_pred_invtrans)))
+
+'''
+Interpretation of Mean Absolute Error (MAE) -
+
+MAE=10, implies that, on average, the predictions's distance from the true value is 10 (e.g true value 
+of populatity is 80 and prediction is 70 or 90... there would be a distance of 10).
+'''
+
+print(data['popularity'].describe())
+
+'''
+You can see that the value of root mean squared error is 12.8, which is greater than 10% of the mean value which is 49.66.
+This means that our algorithm was not very accurate but can still make reasonably good predictions.
+
+
+There are many factors that may have contributed to this inaccuracy, for example :
+Need more data: 
+    We need to have a huge amount of data to get the best possible prediction.
+Bad assumptions:
+    We made the assumption that this data has a linear relationship, but that might not be the case.
+    Visualizing the data may help you determine that.
+Poor features:
+    The features we used may not have had a high enough correlation to the values we were trying to predict.
+'''
 import seaborn as sns
 #distribution of residuals using 
 #distplot - Seaborn distplot lets you show a histogram with a line on it.
