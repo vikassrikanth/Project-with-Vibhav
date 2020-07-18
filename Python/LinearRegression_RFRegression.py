@@ -35,6 +35,20 @@ y =final_data['popularity'].values
 
 y=y.reshape(-1,1) #to make it (x,1)
 
+
+'''
+### Feature Importance
+
+from sklearn.ensemble import ExtraTreesRegressor
+import matplotlib.pyplot as plt
+model = ExtraTreesRegressor()
+model.fit(X,y)
+
+#plot graph of feature importances for better visualization
+feat_importances = pd.Series(model.feature_importances_, index=X.columns)
+feat_importances.nlargest(5).plot(kind='barh')
+plt.show()'''
+
 #checking the shape of X - [0] indicates rows and [1] indicates columns
 print('Number of samples:', X.shape[0])
 print('Number of features:', X.shape[1])
@@ -42,6 +56,8 @@ print('Number of features:', X.shape[1])
 # Splitting the dataset into the Training set and Test set - test size 20% of the values
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
+
+
 
 #scaling technique used is - standard scaler
 #what it does?
@@ -55,6 +71,9 @@ sc_y = StandardScaler()
 y_train = sc_y.fit_transform(y_train)
 
 y_test_sc = sc_y.fit_transform(y_test)
+
+
+
 
 #Linear Regression
 #from sklearn.linear_model module, import the LinearRegression package
@@ -139,7 +158,9 @@ import seaborn as sns
 sns.distplot(y_test-y_pred_invtrans)
 
 #Scatter plot for true and predicted value - should be linear
-plt.scatter(y_test_sc,y_pred)
+plt.scatter(y_test,y_pred_invtrans)
+
+#####################################################################################################################################
 
 
 #There is a way to check regression results like R - use statsmodel package - example -
